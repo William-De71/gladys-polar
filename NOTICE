@@ -1,0 +1,17 @@
+Gladys Polar integration
+Copyright 2026 William Deren
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+The data come from the user's own Polar Flow account through the Polar
+AccessLink API (https://www.polar.com/accesslink-api/), with an API client
+the user creates on https://admin.polaraccesslink.com, under the Polar
+Electro AccessLink Limited License Agreement. No Polar code is included.
+
+This community integration is not affiliated with, endorsed or sponsored by
+Polar Electro Oy. Polar, Polar Flow, Nightly Recharge and Sleep Plus Stages
+are trademarks of Polar Electro Oy, used here only to name the service and
+its data.
+
+The data are those of a consumer wearable: they are not medical data and
+must not be used for a medical decision.

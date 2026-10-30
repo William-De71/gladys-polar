@@ -1,0 +1,541 @@
+{
+  "devices": {
+    "marie": {
+      "external_id": "ext:test-integration:account:10579",
+      "should_poll": false,
+      "params": ["POLAR_USER_ID"],
+      "features": [
+        {
+          "external_id": "ext:test-integration:account:10579:steps",
+          "category": "counter-sensor",
+          "type": "integer",
+          "min": 0,
+          "max": 200000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:account:10579:active_time",
+          "category": "duration",
+          "type": "integer",
+          "unit": "minutes",
+          "min": 0,
+          "max": 1440,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:account:10579:calories",
+          "category": "counter-sensor",
+          "type": "integer",
+          "min": 0,
+          "max": 20000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:account:10579:distance",
+          "category": "distance-sensor",
+          "type": "decimal",
+          "unit": "km",
+          "min": 0,
+          "max": 300,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:account:10579:daily_goal",
+          "category": "level-sensor",
+          "type": "decimal",
+          "unit": "percent",
+          "min": 0,
+          "max": 1000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:account:10579:sleep_score",
+          "category": "counter-sensor",
+          "type": "integer",
+          "min": 0,
+          "max": 100,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:account:10579:sleep_time",
+          "category": "duration",
+          "type": "decimal",
+          "unit": "hours",
+          "min": 0,
+          "max": 24,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:account:10579:nightly_recharge",
+          "category": "counter-sensor",
+          "type": "integer",
+          "min": 0,
+          "max": 6,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:account:10579:ans_charge",
+          "category": "level-sensor",
+          "type": "decimal",
+          "min": -10,
+          "max": 10,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:account:10579:hrv",
+          "category": "duration",
+          "type": "integer",
+          "unit": "milliseconds",
+          "min": 0,
+          "max": 300,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:account:10579:night_heart_rate",
+          "category": "counter-sensor",
+          "type": "integer",
+          "min": 0,
+          "max": 250,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:account:10579:breathing_rate",
+          "category": "level-sensor",
+          "type": "decimal",
+          "min": 0,
+          "max": 60,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:account:10579:cardio_load_ratio",
+          "category": "level-sensor",
+          "type": "decimal",
+          "min": 0,
+          "max": 10,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:account:10579:cardio_load_status",
+          "category": "text",
+          "type": "text",
+          "min": 0,
+          "max": 0,
+          "read_only": true,
+          "has_feedback": false
+        }
+      ]
+    }
+  },
+  "manifest": {
+    "actions": ["refresh", "diagnostic", "disconnect"],
+    "config_schema": [
+      {
+        "key": "intro",
+        "type": "section"
+      },
+      {
+        "key": "client_id",
+        "type": "string"
+      },
+      {
+        "key": "client_secret",
+        "type": "secret"
+      },
+      {
+        "key": "connect_intro",
+        "type": "section"
+      },
+      {
+        "key": "polar_account",
+        "type": "oauth2"
+      },
+      {
+        "key": "options_intro",
+        "type": "section"
+      },
+      {
+        "key": "interval",
+        "type": "select"
+      },
+      {
+        "key": "language",
+        "type": "select"
+      }
+    ],
+    "scene_triggers": [
+      {
+        "key": "exercise_synced",
+        "fields": [
+          {
+            "key": "account",
+            "options": []
+          },
+          {
+            "key": "sport_family",
+            "options": ["running", "cycling", "walking", "swimming", "winter", "strength", "other"]
+          }
+        ],
+        "variables": [
+          {
+            "key": "account_name",
+            "type": "string"
+          },
+          {
+            "key": "sport_label",
+            "type": "string"
+          },
+          {
+            "key": "sport",
+            "type": "string"
+          },
+          {
+            "key": "sport_family",
+            "type": "string"
+          },
+          {
+            "key": "start_time",
+            "type": "string"
+          },
+          {
+            "key": "date",
+            "type": "string"
+          },
+          {
+            "key": "duration_minutes",
+            "type": "number"
+          },
+          {
+            "key": "distance_km",
+            "type": "number"
+          },
+          {
+            "key": "calories",
+            "type": "number"
+          },
+          {
+            "key": "heart_rate_avg",
+            "type": "number"
+          },
+          {
+            "key": "heart_rate_max",
+            "type": "number"
+          },
+          {
+            "key": "training_load",
+            "type": "number"
+          },
+          {
+            "key": "cardio_load",
+            "type": "number"
+          },
+          {
+            "key": "device_model",
+            "type": "string"
+          },
+          {
+            "key": "exercise_id",
+            "type": "string"
+          },
+          {
+            "key": "summary",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "sleep_available",
+        "fields": [
+          {
+            "key": "account",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "account_name",
+            "type": "string"
+          },
+          {
+            "key": "date",
+            "type": "string"
+          },
+          {
+            "key": "sleep_score",
+            "type": "number"
+          },
+          {
+            "key": "sleep_hours",
+            "type": "number"
+          },
+          {
+            "key": "sleep_minutes",
+            "type": "number"
+          },
+          {
+            "key": "deep_minutes",
+            "type": "number"
+          },
+          {
+            "key": "rem_minutes",
+            "type": "number"
+          },
+          {
+            "key": "light_minutes",
+            "type": "number"
+          },
+          {
+            "key": "interruptions_minutes",
+            "type": "number"
+          },
+          {
+            "key": "continuity",
+            "type": "number"
+          },
+          {
+            "key": "sleep_charge",
+            "type": "number"
+          },
+          {
+            "key": "sleep_charge_label",
+            "type": "string"
+          },
+          {
+            "key": "sleep_start",
+            "type": "string"
+          },
+          {
+            "key": "sleep_end",
+            "type": "string"
+          },
+          {
+            "key": "summary",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "nightly_recharge_available",
+        "fields": [
+          {
+            "key": "account",
+            "options": []
+          },
+          {
+            "key": "status",
+            "options": ["1", "2", "3", "4", "5", "6"]
+          }
+        ],
+        "variables": [
+          {
+            "key": "account_name",
+            "type": "string"
+          },
+          {
+            "key": "date",
+            "type": "string"
+          },
+          {
+            "key": "status",
+            "type": "number"
+          },
+          {
+            "key": "status_label",
+            "type": "string"
+          },
+          {
+            "key": "ans_charge",
+            "type": "number"
+          },
+          {
+            "key": "ans_charge_label",
+            "type": "string"
+          },
+          {
+            "key": "hrv_avg",
+            "type": "number"
+          },
+          {
+            "key": "heart_rate_avg",
+            "type": "number"
+          },
+          {
+            "key": "breathing_rate_avg",
+            "type": "number"
+          },
+          {
+            "key": "summary",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "daily_goal_reached",
+        "fields": [
+          {
+            "key": "account",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "account_name",
+            "type": "string"
+          },
+          {
+            "key": "date",
+            "type": "string"
+          },
+          {
+            "key": "daily_goal_percent",
+            "type": "number"
+          },
+          {
+            "key": "steps",
+            "type": "number"
+          },
+          {
+            "key": "active_minutes",
+            "type": "number"
+          },
+          {
+            "key": "calories",
+            "type": "number"
+          },
+          {
+            "key": "distance_km",
+            "type": "number"
+          },
+          {
+            "key": "summary",
+            "type": "string"
+          }
+        ]
+      }
+    ],
+    "scene_actions": [
+      {
+        "key": "get_summary",
+        "fields": ["account"],
+        "outputs": [
+          {
+            "key": "steps",
+            "type": "number"
+          },
+          {
+            "key": "active_minutes",
+            "type": "number"
+          },
+          {
+            "key": "calories",
+            "type": "number"
+          },
+          {
+            "key": "distance_km",
+            "type": "number"
+          },
+          {
+            "key": "daily_goal_percent",
+            "type": "number"
+          },
+          {
+            "key": "activity_date",
+            "type": "string"
+          },
+          {
+            "key": "sleep_score",
+            "type": "number"
+          },
+          {
+            "key": "sleep_hours",
+            "type": "number"
+          },
+          {
+            "key": "sleep_date",
+            "type": "string"
+          },
+          {
+            "key": "nightly_recharge_status",
+            "type": "number"
+          },
+          {
+            "key": "nightly_recharge_label",
+            "type": "string"
+          },
+          {
+            "key": "ans_charge",
+            "type": "number"
+          },
+          {
+            "key": "hrv_avg",
+            "type": "number"
+          },
+          {
+            "key": "cardio_load_status",
+            "type": "string"
+          },
+          {
+            "key": "cardio_load_ratio",
+            "type": "number"
+          },
+          {
+            "key": "last_exercise_sport",
+            "type": "string"
+          },
+          {
+            "key": "last_exercise_date",
+            "type": "string"
+          },
+          {
+            "key": "last_exercise_minutes",
+            "type": "number"
+          },
+          {
+            "key": "weight_kg",
+            "type": "number"
+          },
+          {
+            "key": "summary",
+            "type": "string"
+          }
+        ]
+      }
+    ],
+    "widgets": [
+      {
+        "key": "today",
+        "settings": [],
+        "options": {}
+      },
+      {
+        "key": "night",
+        "settings": [],
+        "options": {}
+      },
+      {
+        "key": "exercises",
+        "settings": [],
+        "options": {}
+      },
+      {
+        "key": "week",
+        "settings": ["metric"],
+        "options": {
+          "metric": ["steps", "active_time", "sleep_score"]
+        }
+      }
+    ]
+  }
+}

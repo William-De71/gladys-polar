@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="534" viewBox="0 0 800 534">
+  <!-- Cover of the Polar integration for Gladys Assistant (illustration: no
+       logo nor product of Polar). A neutral heart rate watch on a wrist band,
+       a heart rate trace, a crescent moon and the three readings of the
+       integration (activity, sleep, recovery). Built into cover.jpg by
+       scripts/build-cover.sh. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101d33"/>
+      <stop offset="1" stop-color="#1f3f66"/>
+    </linearGradient>
+    <linearGradient id="band" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b2f36"/>
+      <stop offset="1" stop-color="#151820"/>
+    </linearGradient>
+    <radialGradient id="dial" cx="0.5" cy="0.45" r="0.6">
+      <stop offset="0" stop-color="#1b2433"/>
+      <stop offset="1" stop-color="#05080d"/>
+    </radialGradient>
+    <mask id="crescent">
+      <rect width="800" height="534" fill="#ffffff"/>
+      <circle cx="675" cy="92" r="40" fill="#000000"/>
+    </mask>
+  </defs>
+  <rect width="800" height="534" fill="url(#bg)"/>
+  <!-- heart rate trace across the cover -->
+  <path d="M0 300 H170 l18 -40 l22 90 l26 -170 l24 160 l18 -40 H800" fill="none"
+        stroke="#e84a5f" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" opacity="0.55"/>
+  <!-- crescent moon and stars -->
+  <circle cx="655" cy="105" r="42" fill="#f6e7b0" mask="url(#crescent)"/>
+  <g fill="#f6e7b0">
+    <circle cx="590" cy="70" r="3"/>
+    <circle cx="720" cy="170" r="2.5"/>
+    <circle cx="560" cy="150" r="2"/>
+    <circle cx="740" cy="60" r="2"/>
+  </g>
+  <!-- the watch: band, case, dial -->
+  <rect x="300" y="20" width="120" height="494" rx="28" fill="url(#band)"/>
+  <g fill="#3a3f48">
+    <circle cx="360" cy="450" r="6"/>
+    <circle cx="360" cy="480" r="6"/>
+  </g>
+  <circle cx="360" cy="267" r="132" fill="#9aa3ad"/>
+  <circle cx="360" cy="267" r="120" fill="#3a404a"/>
+  <circle cx="360" cy="267" r="108" fill="url(#dial)"/>
+  <rect x="490" y="227" width="16" height="30" rx="5" fill="#9aa3ad"/>
+  <rect x="490" y="280" width="16" height="30" rx="5" fill="#9aa3ad"/>
+  <!-- dial: activity ring and heart rate -->
+  <circle cx="360" cy="267" r="92" fill="none" stroke="#24324a" stroke-width="10"/>
+  <path d="M360 175 A92 92 0 1 1 268.6 277" fill="none" stroke="#3cc48b" stroke-width="10" stroke-linecap="round"/>
+  <path d="M342 233 c-10 -14 -32 -6 -28 12 c3 14 28 30 46 44 c18 -14 43 -30 46 -44 c4 -18 -18 -26 -28 -12 l-18 22 z"
+        fill="#e84a5f" transform="translate(-14 -14) scale(1.04)"/>
+  <text x="360" y="318" text-anchor="middle" font-family="DejaVu Sans, Arial, sans-serif" font-size="38"
+        font-weight="bold" fill="#ffffff">58</text>
+  <text x="360" y="342" text-anchor="middle" font-family="DejaVu Sans, Arial, sans-serif" font-size="15"
+        fill="#9fb3c8">bpm</text>
+  <!-- the three readings -->
+  <g font-family="DejaVu Sans, Arial, sans-serif">
+    <rect x="40" y="370" width="200" height="56" rx="14" fill="#ffffff" opacity="0.1"/>
+    <circle cx="70" cy="398" r="11" fill="#3cc48b"/>
+    <text x="92" y="405" font-size="20" fill="#ffffff">8 823 steps</text>
+    <rect x="40" y="440" width="200" height="56" rx="14" fill="#ffffff" opacity="0.1"/>
+    <circle cx="70" cy="468" r="11" fill="#f6e7b0"/>
+    <text x="92" y="475" font-size="20" fill="#ffffff">Sleep 82</text>
+    <rect x="560" y="400" width="200" height="56" rx="14" fill="#ffffff" opacity="0.1"/>
+    <circle cx="590" cy="428" r="11" fill="#4aa3df"/>
+    <text x="612" y="435" font-size="20" fill="#ffffff">Recharge</text>
+  </g>
+  <text x="40" y="70" font-family="DejaVu Sans, Arial, sans-serif" font-size="40" font-weight="bold"
+        fill="#ffffff">Polar</text>
+  <text x="40" y="104" font-family="DejaVu Sans, Arial, sans-serif" font-size="20"
+        fill="#9fb3c8">for Gladys Assistant</text>
+</svg>

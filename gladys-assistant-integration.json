@@ -1,0 +1,1537 @@
+{
+  "manifest_version": 1,
+  "type": "device",
+  "name": "Polar",
+  "description": {
+    "en": "Your Polar watch in Gladys: activity, sleep, Nightly Recharge, training sessions, scenes.",
+    "fr": "Votre montre Polar dans Gladys : activité, sommeil, Nightly Recharge, entraînements, scènes.",
+    "de": "Deine Polar-Uhr in Gladys: Aktivität, Schlaf, Nightly Recharge, Trainings und Szenen.",
+    "es": "Tu reloj Polar en Gladys: actividad, sueño, Nightly Recharge, entrenamientos y escenas."
+  },
+  "version": "0.1.0",
+  "docker_image": "ghcr.io/william-de71/gladys-polar:0.1.0",
+  "gladys_version": ">=5.3.0",
+  "categories": ["leisure", "services"],
+  "keywords": [
+    "Polar Flow",
+    "AccessLink",
+    "Vantage",
+    "Grit X",
+    "Ignite",
+    "montre cardio",
+    "sport watch",
+    "sommeil",
+    "sleep tracker",
+    "fitness"
+  ],
+  "cover_image": "https://raw.githubusercontent.com/William-De71/gladys-polar/main/cover.jpg",
+  "transports": ["cloud"],
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": {
+        "en": "1. Your AccessLink API client",
+        "fr": "1. Votre client API AccessLink",
+        "de": "1. Dein AccessLink-API-Client",
+        "es": "1. Tu cliente de la API AccessLink"
+      },
+      "description": {
+        "en": "Polar gives no shared key: sign in to admin.polaraccesslink.com with your Polar Flow account and create a free API client (an \"application\"). As authorization redirect URL, enter exactly https://my.gladysassistant.com/redirect/oauth. Then copy its Client ID and its secret below. The documentation details every step.",
+        "fr": "Polar ne fournit pas de clé partagée : connectez-vous à admin.polaraccesslink.com avec votre compte Polar Flow et créez un client API gratuit (une « application »). Comme URL de redirection d’autorisation, saisissez exactement https://my.gladysassistant.com/redirect/oauth. Copiez ensuite son Client ID et son secret ci-dessous. La documentation détaille chaque étape.",
+        "de": "Polar stellt keinen gemeinsamen Schlüssel bereit: Melde dich mit deinem Polar-Flow-Konto bei admin.polaraccesslink.com an und erstelle einen kostenlosen API-Client (eine „Anwendung“). Als Autorisierungs-Weiterleitungs-URL gibst du genau https://my.gladysassistant.com/redirect/oauth ein. Kopiere dann seine Client-ID und sein Secret hier unten. Die Dokumentation beschreibt jeden Schritt.",
+        "es": "Polar no ofrece una clave compartida: inicia sesión en admin.polaraccesslink.com con tu cuenta Polar Flow y crea un cliente API gratuito (una «aplicación»). Como URL de redirección de autorización, escribe exactamente https://my.gladysassistant.com/redirect/oauth. Después copia aquí su Client ID y su secreto. La documentación detalla cada paso."
+      },
+      "links": [
+        {
+          "url": "https://admin.polaraccesslink.com",
+          "label": {
+            "en": "Polar AccessLink admin",
+            "fr": "Administration AccessLink",
+            "de": "AccessLink-Verwaltung",
+            "es": "Administración AccessLink"
+          }
+        },
+        {
+          "url": "https://github.com/William-De71/gladys-polar/blob/main/docs/en.md",
+          "label": {
+            "en": "Step-by-step guide",
+            "fr": "Guide pas à pas",
+            "de": "Schritt-für-Schritt-Anleitung",
+            "es": "Guía paso a paso"
+          }
+        }
+      ]
+    },
+    {
+      "key": "client_id",
+      "type": "string",
+      "label": {
+        "en": "Client ID",
+        "fr": "Client ID",
+        "de": "Client-ID",
+        "es": "Client ID"
+      },
+      "description": {
+        "en": "Shown by admin.polaraccesslink.com once the client is created.",
+        "fr": "Affiché par admin.polaraccesslink.com une fois le client créé.",
+        "de": "Wird von admin.polaraccesslink.com nach dem Erstellen des Clients angezeigt.",
+        "es": "Lo muestra admin.polaraccesslink.com una vez creado el cliente."
+      },
+      "placeholder": {
+        "en": "d52d533a-3c71-4141-aea6-3402519678aa",
+        "fr": "d52d533a-3c71-4141-aea6-3402519678aa",
+        "de": "d52d533a-3c71-4141-aea6-3402519678aa",
+        "es": "d52d533a-3c71-4141-aea6-3402519678aa"
+      },
+      "required": true
+    },
+    {
+      "key": "client_secret",
+      "type": "secret",
+      "label": {
+        "en": "Client secret",
+        "fr": "Client secret",
+        "de": "Client-Secret",
+        "es": "Client secret"
+      },
+      "description": {
+        "en": "Shown next to the Client ID. Never written in the logs.",
+        "fr": "Affiché à côté du Client ID. Jamais écrit dans les journaux.",
+        "de": "Wird neben der Client-ID angezeigt. Nie in die Protokolle geschrieben.",
+        "es": "Se muestra junto al Client ID. Nunca se escribe en los registros."
+      },
+      "required": true
+    },
+    {
+      "key": "connect_intro",
+      "type": "section",
+      "label": {
+        "en": "2. Connect your Polar Flow account",
+        "fr": "2. Connectez votre compte Polar Flow",
+        "de": "2. Verbinde dein Polar-Flow-Konto",
+        "es": "2. Conecta tu cuenta Polar Flow"
+      },
+      "description": {
+        "en": "Save first, then click the button and accept on Polar Flow. Polar only shares the data synced after this link: sync your watch with Polar Flow afterwards. Connect again whenever Gladys reports a refused access.",
+        "fr": "Enregistrez d’abord, puis cliquez sur le bouton et acceptez sur Polar Flow. Polar ne partage que les données synchronisées après cette liaison : synchronisez ensuite votre montre avec Polar Flow. Reconnectez-vous si Gladys signale un accès refusé.",
+        "de": "Zuerst speichern, dann auf die Schaltfläche klicken und bei Polar Flow zustimmen. Polar teilt nur Daten, die nach dieser Verknüpfung synchronisiert werden: Synchronisiere danach deine Uhr mit Polar Flow. Verbinde dich erneut, wenn Gladys einen abgelehnten Zugriff meldet.",
+        "es": "Guarda primero, pulsa el botón y acepta en Polar Flow. Polar solo comparte los datos sincronizados después de esta vinculación: sincroniza luego tu reloj con Polar Flow. Vuelve a conectarte si Gladys indica un acceso rechazado."
+      }
+    },
+    {
+      "key": "polar_account",
+      "type": "oauth2",
+      "label": {
+        "en": "Connect with Polar",
+        "fr": "Se connecter avec Polar",
+        "de": "Mit Polar verbinden",
+        "es": "Conectar con Polar"
+      },
+      "description": {
+        "en": "Gladys only asks to read your data (accesslink.read_all); it never changes anything in Polar Flow.",
+        "fr": "Gladys demande seulement à lire vos données (accesslink.read_all) ; elle ne modifie rien dans Polar Flow.",
+        "de": "Gladys fragt nur Lesezugriff auf deine Daten an (accesslink.read_all) und ändert nichts in Polar Flow.",
+        "es": "Gladys solo pide leer tus datos (accesslink.read_all); nunca cambia nada en Polar Flow."
+      }
+    },
+    {
+      "key": "options_intro",
+      "type": "section",
+      "label": {
+        "en": "3. Options",
+        "fr": "3. Options",
+        "de": "3. Optionen",
+        "es": "3. Opciones"
+      }
+    },
+    {
+      "key": "interval",
+      "type": "select",
+      "required": false,
+      "default": "30",
+      "label": {
+        "en": "Reading interval",
+        "fr": "Intervalle de lecture",
+        "de": "Abfrageintervall",
+        "es": "Intervalo de lectura"
+      },
+      "description": {
+        "en": "Polar sends Gladys no notification: the integration reads it at this pace (5 or 6 requests a reading), and whenever you press Sync now.",
+        "fr": "Polar n’envoie aucune notification à Gladys : l’intégration le lit à ce rythme (5 ou 6 requêtes par lecture), et chaque fois que vous appuyez sur Synchroniser.",
+        "de": "Polar schickt Gladys keine Benachrichtigung: Die Integration fragt Polar in diesem Takt ab (5 oder 6 Anfragen pro Abfrage) und bei jedem Tippen auf Jetzt abrufen.",
+        "es": "Polar no envía notificaciones a Gladys: la integración lo lee a este ritmo (5 o 6 peticiones por lectura) y cada vez que pulsas Sincronizar."
+      },
+      "options": [
+        {
+          "value": "15",
+          "label": {
+            "en": "Every 15 minutes",
+            "fr": "Toutes les 15 minutes",
+            "de": "Alle 15 Minuten",
+            "es": "Cada 15 minutos"
+          }
+        },
+        {
+          "value": "30",
+          "label": {
+            "en": "Every 30 minutes",
+            "fr": "Toutes les 30 minutes",
+            "de": "Alle 30 Minuten",
+            "es": "Cada 30 minutos"
+          }
+        },
+        {
+          "value": "60",
+          "label": {
+            "en": "Every hour",
+            "fr": "Toutes les heures",
+            "de": "Stündlich",
+            "es": "Cada hora"
+          }
+        },
+        {
+          "value": "120",
+          "label": {
+            "en": "Every 2 hours",
+            "fr": "Toutes les 2 heures",
+            "de": "Alle 2 Stunden",
+            "es": "Cada 2 horas"
+          }
+        }
+      ]
+    },
+    {
+      "key": "language",
+      "type": "select",
+      "required": false,
+      "default": "auto",
+      "label": {
+        "en": "Language of the texts",
+        "fr": "Langue des textes",
+        "de": "Sprache der Texte",
+        "es": "Idioma de los textos"
+      },
+      "description": {
+        "en": "Device and feature names, cardio load status and scene texts. Automatic: the language of your dashboard, once a widget has been displayed.",
+        "fr": "Noms de l’appareil et des fonctionnalités, statut de charge cardio et textes des scènes. Automatique : la langue de votre tableau de bord, dès qu’un widget a été affiché.",
+        "de": "Geräte- und Funktionsnamen, Cardio-Load-Status und Szenentexte. Automatisch: die Sprache deines Dashboards, sobald ein Widget angezeigt wurde.",
+        "es": "Nombres del dispositivo y de las funciones, estado de carga cardio y textos de escenas. Automático: el idioma de tu panel, en cuanto se haya mostrado un widget."
+      },
+      "options": [
+        {
+          "value": "auto",
+          "label": {
+            "en": "Automatic",
+            "fr": "Automatique",
+            "de": "Automatisch",
+            "es": "Automático"
+          }
+        },
+        {
+          "value": "en",
+          "label": {
+            "en": "English",
+            "fr": "Anglais",
+            "de": "Englisch",
+            "es": "Inglés"
+          }
+        },
+        {
+          "value": "fr",
+          "label": {
+            "en": "French",
+            "fr": "Français",
+            "de": "Französisch",
+            "es": "Francés"
+          }
+        },
+        {
+          "value": "de",
+          "label": {
+            "en": "German",
+            "fr": "Allemand",
+            "de": "Deutsch",
+            "es": "Alemán"
+          }
+        },
+        {
+          "value": "es",
+          "label": {
+            "en": "Spanish",
+            "fr": "Espagnol",
+            "de": "Spanisch",
+            "es": "Español"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "key": "refresh",
+      "timeout_seconds": 60,
+      "label": {
+        "en": "Sync now",
+        "fr": "Synchroniser maintenant",
+        "de": "Jetzt abrufen",
+        "es": "Sincronizar ahora"
+      },
+      "description": {
+        "en": "Reads Polar now (after syncing the watch with Polar Flow) instead of waiting for the next reading.",
+        "fr": "Lit Polar tout de suite (après avoir synchronisé la montre avec Polar Flow) sans attendre la prochaine lecture.",
+        "de": "Fragt Polar sofort ab (nach dem Synchronisieren der Uhr mit Polar Flow), ohne auf die nächste Abfrage zu warten.",
+        "es": "Lee Polar ahora (tras sincronizar el reloj con Polar Flow) sin esperar a la próxima lectura."
+      }
+    },
+    {
+      "key": "diagnostic",
+      "timeout_seconds": 15,
+      "label": {
+        "en": "Diagnostic",
+        "fr": "Diagnostic",
+        "de": "Diagnose",
+        "es": "Diagnóstico"
+      },
+      "description": {
+        "en": "Writes an anonymized summary to the logs of the integration, to attach to a bug report.",
+        "fr": "Écrit un résumé anonymisé dans les journaux de l’intégration, à joindre à un rapport de bug.",
+        "de": "Schreibt eine anonymisierte Zusammenfassung in die Protokolle der Integration, für einen Fehlerbericht.",
+        "es": "Escribe un resumen anonimizado en los registros de la integración, para adjuntarlo a un informe de error."
+      }
+    },
+    {
+      "key": "disconnect",
+      "timeout_seconds": 30,
+      "label": {
+        "en": "Unlink the Polar account",
+        "fr": "Délier le compte Polar",
+        "de": "Polar-Konto trennen",
+        "es": "Desvincular la cuenta Polar"
+      },
+      "description": {
+        "en": "De-registers the account from your AccessLink client and forgets the token. The device stays.",
+        "fr": "Désinscrit le compte de votre client AccessLink et oublie le jeton. L’appareil reste.",
+        "de": "Meldet das Konto von deinem AccessLink-Client ab und vergisst das Token. Das Gerät bleibt.",
+        "es": "Da de baja la cuenta de tu cliente AccessLink y olvida el token. El dispositivo permanece."
+      }
+    }
+  ],
+  "widgets": [
+    {
+      "key": "today",
+      "icon": "activity",
+      "action_timeout_seconds": 60,
+      "label": {
+        "en": "Polar today",
+        "fr": "Polar aujourd’hui",
+        "de": "Polar heute",
+        "es": "Polar hoy"
+      },
+      "description": {
+        "en": "Daily goal, steps, active time, calories and distance, with a sync button.",
+        "fr": "Objectif du jour, pas, temps actif, calories et distance, avec un bouton de synchro.",
+        "de": "Tagesziel, Schritte, aktive Zeit, Kalorien und Strecke, mit Abruf-Taste.",
+        "es": "Objetivo diario, pasos, tiempo activo, calorías y distancia, con botón de sincronizar."
+      }
+    },
+    {
+      "key": "night",
+      "icon": "moon",
+      "label": {
+        "en": "Polar last night",
+        "fr": "Polar dernière nuit",
+        "de": "Polar letzte Nacht",
+        "es": "Polar última noche"
+      },
+      "description": {
+        "en": "Sleep score, time asleep, deep and REM sleep, then the Nightly Recharge.",
+        "fr": "Score de sommeil, durée, sommeil profond et paradoxal, puis la Nightly Recharge.",
+        "de": "Schlafwert, Schlafdauer, Tief- und REM-Schlaf, dann die Nightly Recharge.",
+        "es": "Puntuación, tiempo dormido, sueño profundo y REM, y la Nightly Recharge."
+      }
+    },
+    {
+      "key": "exercises",
+      "icon": "award",
+      "label": {
+        "en": "Polar training",
+        "fr": "Polar entraînements",
+        "de": "Polar Trainings",
+        "es": "Polar entrenamientos"
+      },
+      "description": {
+        "en": "The last training sessions and the training status (cardio load).",
+        "fr": "Les derniers entraînements et le statut d’entraînement (charge cardio).",
+        "de": "Die letzten Trainings und der Trainingsstatus (Cardio Load).",
+        "es": "Los últimos entrenamientos y el estado de entrenamiento (carga cardio)."
+      }
+    },
+    {
+      "key": "week",
+      "icon": "bar-chart-2",
+      "label": {
+        "en": "Polar 7 days",
+        "fr": "Polar 7 jours",
+        "de": "Polar 7 Tage",
+        "es": "Polar 7 días"
+      },
+      "description": {
+        "en": "The last seven days as a bar chart: steps, active time or sleep score.",
+        "fr": "Les sept derniers jours en barres : pas, temps actif ou score de sommeil.",
+        "de": "Die letzten sieben Tage als Balken: Schritte, aktive Zeit oder Schlafwert.",
+        "es": "Los últimos siete días en barras: pasos, tiempo activo o puntuación del sueño."
+      },
+      "settings": [
+        {
+          "key": "metric",
+          "type": "select",
+          "required": false,
+          "default": "steps",
+          "label": {
+            "en": "Shown",
+            "fr": "Affiché",
+            "de": "Angezeigt",
+            "es": "Mostrado"
+          },
+          "options": [
+            {
+              "value": "steps",
+              "label": {
+                "en": "Steps",
+                "fr": "Pas",
+                "de": "Schritte",
+                "es": "Pasos"
+              }
+            },
+            {
+              "value": "active_time",
+              "label": {
+                "en": "Active time",
+                "fr": "Temps actif",
+                "de": "Aktive Zeit",
+                "es": "Tiempo activo"
+              }
+            },
+            {
+              "value": "sleep_score",
+              "label": {
+                "en": "Sleep score",
+                "fr": "Score de sommeil",
+                "de": "Schlafwert",
+                "es": "Puntuación del sueño"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "scene_triggers": [
+    {
+      "key": "exercise_synced",
+      "label": {
+        "en": "Polar: training session synced",
+        "fr": "Polar : entraînement synchronisé",
+        "de": "Polar: Training synchronisiert",
+        "es": "Polar: entrenamiento sincronizado"
+      },
+      "description": {
+        "en": "A new training session reached Polar Flow (the watch synced it). Seen at the next reading.",
+        "fr": "Un nouvel entraînement est arrivé dans Polar Flow (la montre l’a synchronisé). Vu à la lecture suivante.",
+        "de": "Ein neues Training ist in Polar Flow angekommen (die Uhr hat es synchronisiert). Bei der nächsten Abfrage erkannt.",
+        "es": "Un nuevo entrenamiento llegó a Polar Flow (el reloj lo sincronizó). Se detecta en la siguiente lectura."
+      },
+      "fields": [
+        {
+          "key": "account",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Polar account",
+            "fr": "Compte Polar",
+            "de": "Polar-Konto",
+            "es": "Cuenta Polar"
+          },
+          "description": {
+            "en": "Leave empty for any account.",
+            "fr": "Laissez vide pour tous les comptes.",
+            "de": "Leer lassen für jedes Konto.",
+            "es": "Déjalo vacío para cualquier cuenta."
+          },
+          "required": false
+        },
+        {
+          "key": "sport_family",
+          "type": "multi_select",
+          "required": false,
+          "label": {
+            "en": "Sport",
+            "fr": "Sport",
+            "de": "Sportart",
+            "es": "Deporte"
+          },
+          "description": {
+            "en": "Leave empty for any sport.",
+            "fr": "Laissez vide pour tous les sports.",
+            "de": "Leer lassen für jede Sportart.",
+            "es": "Déjalo vacío para cualquier deporte."
+          },
+          "options": [
+            {
+              "value": "running",
+              "label": {
+                "en": "Running",
+                "fr": "Course à pied",
+                "de": "Laufen",
+                "es": "Carrera"
+              }
+            },
+            {
+              "value": "cycling",
+              "label": {
+                "en": "Cycling",
+                "fr": "Vélo",
+                "de": "Radfahren",
+                "es": "Ciclismo"
+              }
+            },
+            {
+              "value": "walking",
+              "label": {
+                "en": "Walking and hiking",
+                "fr": "Marche et randonnée",
+                "de": "Gehen und Wandern",
+                "es": "Caminar y senderismo"
+              }
+            },
+            {
+              "value": "swimming",
+              "label": {
+                "en": "Swimming",
+                "fr": "Natation",
+                "de": "Schwimmen",
+                "es": "Natación"
+              }
+            },
+            {
+              "value": "winter",
+              "label": {
+                "en": "Winter sports",
+                "fr": "Sports d’hiver",
+                "de": "Wintersport",
+                "es": "Deportes de invierno"
+              }
+            },
+            {
+              "value": "strength",
+              "label": {
+                "en": "Strength and fitness",
+                "fr": "Musculation et fitness",
+                "de": "Kraft und Fitness",
+                "es": "Fuerza y fitness"
+              }
+            },
+            {
+              "value": "other",
+              "label": {
+                "en": "Other sports",
+                "fr": "Autres sports",
+                "de": "Andere Sportarten",
+                "es": "Otros deportes"
+              }
+            }
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "account_name",
+          "type": "string",
+          "label": {
+            "en": "Account name",
+            "fr": "Nom du compte",
+            "de": "Kontoname",
+            "es": "Nombre de la cuenta"
+          }
+        },
+        {
+          "key": "sport_label",
+          "type": "string",
+          "label": {
+            "en": "Sport",
+            "fr": "Sport",
+            "de": "Sportart",
+            "es": "Deporte"
+          }
+        },
+        {
+          "key": "sport",
+          "type": "string",
+          "label": {
+            "en": "Polar sport code",
+            "fr": "Code du sport Polar",
+            "de": "Polar-Sportcode",
+            "es": "Código de deporte Polar"
+          },
+          "description": {
+            "en": "RUNNING, ROAD_BIKING…",
+            "fr": "RUNNING, ROAD_BIKING…",
+            "de": "RUNNING, ROAD_BIKING…",
+            "es": "RUNNING, ROAD_BIKING…"
+          }
+        },
+        {
+          "key": "sport_family",
+          "type": "string",
+          "label": {
+            "en": "Sport family",
+            "fr": "Famille de sport",
+            "de": "Sportfamilie",
+            "es": "Familia de deporte"
+          },
+          "description": {
+            "en": "running, cycling, walking, swimming, winter, strength or other.",
+            "fr": "running, cycling, walking, swimming, winter, strength ou other.",
+            "de": "running, cycling, walking, swimming, winter, strength oder other.",
+            "es": "running, cycling, walking, swimming, winter, strength u other."
+          }
+        },
+        {
+          "key": "start_time",
+          "type": "string",
+          "label": {
+            "en": "Start (watch time)",
+            "fr": "Début (heure de la montre)",
+            "de": "Start (Uhrzeit der Uhr)",
+            "es": "Inicio (hora del reloj)"
+          }
+        },
+        {
+          "key": "date",
+          "type": "string",
+          "label": {
+            "en": "Date (YYYY-MM-DD)",
+            "fr": "Date (AAAA-MM-JJ)",
+            "de": "Datum (JJJJ-MM-TT)",
+            "es": "Fecha (AAAA-MM-DD)"
+          }
+        },
+        {
+          "key": "duration_minutes",
+          "type": "number",
+          "label": {
+            "en": "Duration (min)",
+            "fr": "Durée (min)",
+            "de": "Dauer (Min.)",
+            "es": "Duración (min)"
+          }
+        },
+        {
+          "key": "distance_km",
+          "type": "number",
+          "label": {
+            "en": "Distance (km)",
+            "fr": "Distance (km)",
+            "de": "Strecke (km)",
+            "es": "Distancia (km)"
+          }
+        },
+        {
+          "key": "calories",
+          "type": "number",
+          "label": {
+            "en": "Calories (kcal)",
+            "fr": "Calories (kcal)",
+            "de": "Kalorien (kcal)",
+            "es": "Calorías (kcal)"
+          }
+        },
+        {
+          "key": "heart_rate_avg",
+          "type": "number",
+          "label": {
+            "en": "Average heart rate (bpm)",
+            "fr": "Fréquence cardiaque moyenne (bpm)",
+            "de": "Durchschnittliche Herzfrequenz (S/min)",
+            "es": "Frecuencia cardíaca media (ppm)"
+          }
+        },
+        {
+          "key": "heart_rate_max",
+          "type": "number",
+          "label": {
+            "en": "Maximum heart rate (bpm)",
+            "fr": "Fréquence cardiaque max. (bpm)",
+            "de": "Maximale Herzfrequenz (S/min)",
+            "es": "Frecuencia cardíaca máx. (ppm)"
+          }
+        },
+        {
+          "key": "training_load",
+          "type": "number",
+          "label": {
+            "en": "Training load",
+            "fr": "Charge d’entraînement",
+            "de": "Trainingsbelastung",
+            "es": "Carga de entrenamiento"
+          }
+        },
+        {
+          "key": "cardio_load",
+          "type": "number",
+          "label": {
+            "en": "Cardio load",
+            "fr": "Charge cardio",
+            "de": "Cardio Load",
+            "es": "Carga cardio"
+          }
+        },
+        {
+          "key": "device_model",
+          "type": "string",
+          "label": {
+            "en": "Polar product",
+            "fr": "Produit Polar",
+            "de": "Polar-Produkt",
+            "es": "Producto Polar"
+          }
+        },
+        {
+          "key": "exercise_id",
+          "type": "string",
+          "label": {
+            "en": "Session ID",
+            "fr": "Identifiant de la séance",
+            "de": "Trainings-ID",
+            "es": "ID de la sesión"
+          }
+        },
+        {
+          "key": "summary",
+          "type": "string",
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
+          },
+          "description": {
+            "en": "A ready-made sentence, in the language of the configuration.",
+            "fr": "Une phrase toute faite, dans la langue de la configuration.",
+            "de": "Ein fertiger Satz in der Sprache der Konfiguration.",
+            "es": "Una frase lista, en el idioma de la configuración."
+          }
+        }
+      ]
+    },
+    {
+      "key": "sleep_available",
+      "label": {
+        "en": "Polar: new night available",
+        "fr": "Polar : nouvelle nuit disponible",
+        "de": "Polar: neue Nacht verfügbar",
+        "es": "Polar: nueva noche disponible"
+      },
+      "description": {
+        "en": "The night of the last two days reached Polar Flow (after the morning sync).",
+        "fr": "La nuit des deux derniers jours est arrivée dans Polar Flow (après la synchro du matin).",
+        "de": "Die Nacht der letzten zwei Tage ist in Polar Flow angekommen (nach der Synchronisierung am Morgen).",
+        "es": "La noche de los dos últimos días llegó a Polar Flow (tras la sincronización de la mañana)."
+      },
+      "fields": [
+        {
+          "key": "account",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Polar account",
+            "fr": "Compte Polar",
+            "de": "Polar-Konto",
+            "es": "Cuenta Polar"
+          },
+          "description": {
+            "en": "Leave empty for any account.",
+            "fr": "Laissez vide pour tous les comptes.",
+            "de": "Leer lassen für jedes Konto.",
+            "es": "Déjalo vacío para cualquier cuenta."
+          },
+          "required": false
+        }
+      ],
+      "variables": [
+        {
+          "key": "account_name",
+          "type": "string",
+          "label": {
+            "en": "Account name",
+            "fr": "Nom du compte",
+            "de": "Kontoname",
+            "es": "Nombre de la cuenta"
+          }
+        },
+        {
+          "key": "date",
+          "type": "string",
+          "label": {
+            "en": "Date (YYYY-MM-DD)",
+            "fr": "Date (AAAA-MM-JJ)",
+            "de": "Datum (JJJJ-MM-TT)",
+            "es": "Fecha (AAAA-MM-DD)"
+          },
+          "description": {
+            "en": "The date Polar gives the night (the wake-up day).",
+            "fr": "La date que Polar donne à la nuit (le jour du réveil).",
+            "de": "Das Datum, das Polar der Nacht gibt (der Tag des Aufwachens).",
+            "es": "La fecha que Polar da a la noche (el día del despertar)."
+          }
+        },
+        {
+          "key": "sleep_score",
+          "type": "number",
+          "label": {
+            "en": "Sleep score (1-100)",
+            "fr": "Score de sommeil (1-100)",
+            "de": "Schlafwert (1-100)",
+            "es": "Puntuación del sueño (1-100)"
+          }
+        },
+        {
+          "key": "sleep_hours",
+          "type": "number",
+          "label": {
+            "en": "Time asleep (h)",
+            "fr": "Durée de sommeil (h)",
+            "de": "Schlafdauer (Std.)",
+            "es": "Tiempo dormido (h)"
+          }
+        },
+        {
+          "key": "sleep_minutes",
+          "type": "number",
+          "label": {
+            "en": "Time asleep (min)",
+            "fr": "Durée de sommeil (min)",
+            "de": "Schlafdauer (Min.)",
+            "es": "Tiempo dormido (min)"
+          }
+        },
+        {
+          "key": "deep_minutes",
+          "type": "number",
+          "label": {
+            "en": "Deep sleep (min)",
+            "fr": "Sommeil profond (min)",
+            "de": "Tiefschlaf (Min.)",
+            "es": "Sueño profundo (min)"
+          }
+        },
+        {
+          "key": "rem_minutes",
+          "type": "number",
+          "label": {
+            "en": "REM sleep (min)",
+            "fr": "Sommeil paradoxal (min)",
+            "de": "REM-Schlaf (Min.)",
+            "es": "Sueño REM (min)"
+          }
+        },
+        {
+          "key": "light_minutes",
+          "type": "number",
+          "label": {
+            "en": "Light sleep (min)",
+            "fr": "Sommeil léger (min)",
+            "de": "Leichtschlaf (Min.)",
+            "es": "Sueño ligero (min)"
+          }
+        },
+        {
+          "key": "interruptions_minutes",
+          "type": "number",
+          "label": {
+            "en": "Interruptions (min)",
+            "fr": "Interruptions (min)",
+            "de": "Unterbrechungen (Min.)",
+            "es": "Interrupciones (min)"
+          }
+        },
+        {
+          "key": "continuity",
+          "type": "number",
+          "label": {
+            "en": "Continuity (1-5)",
+            "fr": "Continuité (1-5)",
+            "de": "Kontinuität (1-5)",
+            "es": "Continuidad (1-5)"
+          }
+        },
+        {
+          "key": "sleep_charge",
+          "type": "number",
+          "label": {
+            "en": "Sleep charge (1-5)",
+            "fr": "Sleep charge (1-5)",
+            "de": "Sleep Charge (1-5)",
+            "es": "Sleep charge (1-5)"
+          },
+          "description": {
+            "en": "Compared to your usual level: 1 much below, 3 usual, 5 much above.",
+            "fr": "Par rapport à votre habitude : 1 bien en dessous, 3 habituelle, 5 bien au-dessus.",
+            "de": "Im Vergleich zu deinem üblichen Niveau: 1 weit darunter, 3 üblich, 5 weit darüber.",
+            "es": "Comparado con lo habitual: 1 muy por debajo, 3 habitual, 5 muy por encima."
+          }
+        },
+        {
+          "key": "sleep_charge_label",
+          "type": "string",
+          "label": {
+            "en": "Sleep charge (text)",
+            "fr": "Sleep charge (texte)",
+            "de": "Sleep Charge (Text)",
+            "es": "Sleep charge (texto)"
+          }
+        },
+        {
+          "key": "sleep_start",
+          "type": "string",
+          "label": {
+            "en": "Fell asleep (HH:MM)",
+            "fr": "Endormissement (HH:MM)",
+            "de": "Eingeschlafen (HH:MM)",
+            "es": "Dormido desde (HH:MM)"
+          }
+        },
+        {
+          "key": "sleep_end",
+          "type": "string",
+          "label": {
+            "en": "Woke up (HH:MM)",
+            "fr": "Réveil (HH:MM)",
+            "de": "Aufgewacht (HH:MM)",
+            "es": "Despertar (HH:MM)"
+          }
+        },
+        {
+          "key": "summary",
+          "type": "string",
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
+          },
+          "description": {
+            "en": "A ready-made sentence, in the language of the configuration.",
+            "fr": "Une phrase toute faite, dans la langue de la configuration.",
+            "de": "Ein fertiger Satz in der Sprache der Konfiguration.",
+            "es": "Una frase lista, en el idioma de la configuración."
+          }
+        }
+      ]
+    },
+    {
+      "key": "nightly_recharge_available",
+      "label": {
+        "en": "Polar: Nightly Recharge available",
+        "fr": "Polar : Nightly Recharge disponible",
+        "de": "Polar: Nightly Recharge verfügbar",
+        "es": "Polar: Nightly Recharge disponible"
+      },
+      "description": {
+        "en": "The Nightly Recharge of the last two days reached Polar Flow, with its status.",
+        "fr": "La Nightly Recharge des deux derniers jours est arrivée dans Polar Flow, avec son statut.",
+        "de": "Die Nightly Recharge der letzten zwei Tage ist in Polar Flow angekommen, mit ihrem Status.",
+        "es": "La Nightly Recharge de los dos últimos días llegó a Polar Flow, con su estado."
+      },
+      "fields": [
+        {
+          "key": "account",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Polar account",
+            "fr": "Compte Polar",
+            "de": "Polar-Konto",
+            "es": "Cuenta Polar"
+          },
+          "description": {
+            "en": "Leave empty for any account.",
+            "fr": "Laissez vide pour tous les comptes.",
+            "de": "Leer lassen für jedes Konto.",
+            "es": "Déjalo vacío para cualquier cuenta."
+          },
+          "required": false
+        },
+        {
+          "key": "status",
+          "type": "multi_select",
+          "required": false,
+          "label": {
+            "en": "Status",
+            "fr": "Statut",
+            "de": "Status",
+            "es": "Estado"
+          },
+          "description": {
+            "en": "Leave empty for any status.",
+            "fr": "Laissez vide pour tous les statuts.",
+            "de": "Leer lassen für jeden Status.",
+            "es": "Déjalo vacío para cualquier estado."
+          },
+          "options": [
+            {
+              "value": "1",
+              "label": {
+                "en": "1 – Very poor",
+                "fr": "1 – Très faible",
+                "de": "1 – Sehr schwach",
+                "es": "1 – Muy baja"
+              }
+            },
+            {
+              "value": "2",
+              "label": {
+                "en": "2 – Poor",
+                "fr": "2 – Faible",
+                "de": "2 – Schwach",
+                "es": "2 – Baja"
+              }
+            },
+            {
+              "value": "3",
+              "label": {
+                "en": "3 – Compromised",
+                "fr": "3 – Compromise",
+                "de": "3 – Beeinträchtigt",
+                "es": "3 – Comprometida"
+              }
+            },
+            {
+              "value": "4",
+              "label": {
+                "en": "4 – OK",
+                "fr": "4 – Correcte",
+                "de": "4 – OK",
+                "es": "4 – Correcta"
+              }
+            },
+            {
+              "value": "5",
+              "label": {
+                "en": "5 – Good",
+                "fr": "5 – Bonne",
+                "de": "5 – Gut",
+                "es": "5 – Buena"
+              }
+            },
+            {
+              "value": "6",
+              "label": {
+                "en": "6 – Very good",
+                "fr": "6 – Très bonne",
+                "de": "6 – Sehr gut",
+                "es": "6 – Muy buena"
+              }
+            }
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "account_name",
+          "type": "string",
+          "label": {
+            "en": "Account name",
+            "fr": "Nom du compte",
+            "de": "Kontoname",
+            "es": "Nombre de la cuenta"
+          }
+        },
+        {
+          "key": "date",
+          "type": "string",
+          "label": {
+            "en": "Date (YYYY-MM-DD)",
+            "fr": "Date (AAAA-MM-JJ)",
+            "de": "Datum (JJJJ-MM-TT)",
+            "es": "Fecha (AAAA-MM-DD)"
+          }
+        },
+        {
+          "key": "status",
+          "type": "number",
+          "label": {
+            "en": "Status (1-6)",
+            "fr": "Statut (1-6)",
+            "de": "Status (1-6)",
+            "es": "Estado (1-6)"
+          },
+          "description": {
+            "en": "1 very poor, 2 poor, 3 compromised, 4 OK, 5 good, 6 very good.",
+            "fr": "1 très faible, 2 faible, 3 compromise, 4 correcte, 5 bonne, 6 très bonne.",
+            "de": "1 sehr schwach, 2 schwach, 3 beeinträchtigt, 4 OK, 5 gut, 6 sehr gut.",
+            "es": "1 muy baja, 2 baja, 3 comprometida, 4 correcta, 5 buena, 6 muy buena."
+          }
+        },
+        {
+          "key": "status_label",
+          "type": "string",
+          "label": {
+            "en": "Status (text)",
+            "fr": "Statut (texte)",
+            "de": "Status (Text)",
+            "es": "Estado (texto)"
+          }
+        },
+        {
+          "key": "ans_charge",
+          "type": "number",
+          "label": {
+            "en": "ANS charge (-10 to +10)",
+            "fr": "Charge SNA (-10 à +10)",
+            "de": "ANS-Ladung (-10 bis +10)",
+            "es": "Carga SNA (-10 a +10)"
+          }
+        },
+        {
+          "key": "ans_charge_label",
+          "type": "string",
+          "label": {
+            "en": "ANS charge (text)",
+            "fr": "Charge SNA (texte)",
+            "de": "ANS-Ladung (Text)",
+            "es": "Carga SNA (texto)"
+          }
+        },
+        {
+          "key": "hrv_avg",
+          "type": "number",
+          "label": {
+            "en": "Heart rate variability (ms)",
+            "fr": "Variabilité cardiaque (ms)",
+            "de": "Herzfrequenzvariabilität (ms)",
+            "es": "Variabilidad cardíaca (ms)"
+          }
+        },
+        {
+          "key": "heart_rate_avg",
+          "type": "number",
+          "label": {
+            "en": "Heart rate (bpm)",
+            "fr": "Fréquence cardiaque (bpm)",
+            "de": "Herzfrequenz (S/min)",
+            "es": "Frecuencia cardíaca (ppm)"
+          }
+        },
+        {
+          "key": "breathing_rate_avg",
+          "type": "number",
+          "label": {
+            "en": "Breathing rate (per min)",
+            "fr": "Fréquence respiratoire (par min)",
+            "de": "Atemfrequenz (pro Min.)",
+            "es": "Frecuencia respiratoria (por min)"
+          }
+        },
+        {
+          "key": "summary",
+          "type": "string",
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
+          },
+          "description": {
+            "en": "A ready-made sentence, in the language of the configuration.",
+            "fr": "Une phrase toute faite, dans la langue de la configuration.",
+            "de": "Ein fertiger Satz in der Sprache der Konfiguration.",
+            "es": "Una frase lista, en el idioma de la configuración."
+          }
+        }
+      ]
+    },
+    {
+      "key": "daily_goal_reached",
+      "label": {
+        "en": "Polar: daily activity goal reached",
+        "fr": "Polar : objectif d’activité atteint",
+        "de": "Polar: Aktivitätsziel erreicht",
+        "es": "Polar: objetivo de actividad alcanzado"
+      },
+      "description": {
+        "en": "Today’s activity reached 100 % of the daily goal set in Polar Flow (once a day).",
+        "fr": "L’activité du jour a atteint 100 % de l’objectif fixé dans Polar Flow (une fois par jour).",
+        "de": "Die heutige Aktivität hat 100 % des in Polar Flow festgelegten Tagesziels erreicht (einmal pro Tag).",
+        "es": "La actividad de hoy alcanzó el 100 % del objetivo fijado en Polar Flow (una vez al día)."
+      },
+      "fields": [
+        {
+          "key": "account",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Polar account",
+            "fr": "Compte Polar",
+            "de": "Polar-Konto",
+            "es": "Cuenta Polar"
+          },
+          "description": {
+            "en": "Leave empty for any account.",
+            "fr": "Laissez vide pour tous les comptes.",
+            "de": "Leer lassen für jedes Konto.",
+            "es": "Déjalo vacío para cualquier cuenta."
+          },
+          "required": false
+        }
+      ],
+      "variables": [
+        {
+          "key": "account_name",
+          "type": "string",
+          "label": {
+            "en": "Account name",
+            "fr": "Nom du compte",
+            "de": "Kontoname",
+            "es": "Nombre de la cuenta"
+          }
+        },
+        {
+          "key": "date",
+          "type": "string",
+          "label": {
+            "en": "Date (YYYY-MM-DD)",
+            "fr": "Date (AAAA-MM-JJ)",
+            "de": "Datum (JJJJ-MM-TT)",
+            "es": "Fecha (AAAA-MM-DD)"
+          }
+        },
+        {
+          "key": "daily_goal_percent",
+          "type": "number",
+          "label": {
+            "en": "Daily goal (%)",
+            "fr": "Objectif du jour (%)",
+            "de": "Tagesziel (%)",
+            "es": "Objetivo diario (%)"
+          }
+        },
+        {
+          "key": "steps",
+          "type": "number",
+          "label": {
+            "en": "Steps",
+            "fr": "Pas",
+            "de": "Schritte",
+            "es": "Pasos"
+          }
+        },
+        {
+          "key": "active_minutes",
+          "type": "number",
+          "label": {
+            "en": "Active time (min)",
+            "fr": "Temps actif (min)",
+            "de": "Aktive Zeit (Min.)",
+            "es": "Tiempo activo (min)"
+          }
+        },
+        {
+          "key": "calories",
+          "type": "number",
+          "label": {
+            "en": "Calories (kcal)",
+            "fr": "Calories (kcal)",
+            "de": "Kalorien (kcal)",
+            "es": "Calorías (kcal)"
+          }
+        },
+        {
+          "key": "distance_km",
+          "type": "number",
+          "label": {
+            "en": "Distance (km)",
+            "fr": "Distance (km)",
+            "de": "Strecke (km)",
+            "es": "Distancia (km)"
+          }
+        },
+        {
+          "key": "summary",
+          "type": "string",
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
+          },
+          "description": {
+            "en": "A ready-made sentence, in the language of the configuration.",
+            "fr": "Une phrase toute faite, dans la langue de la configuration.",
+            "de": "Ein fertiger Satz in der Sprache der Konfiguration.",
+            "es": "Una frase lista, en el idioma de la configuración."
+          }
+        }
+      ]
+    }
+  ],
+  "scene_actions": [
+    {
+      "key": "get_summary",
+      "timeout_seconds": 15,
+      "label": {
+        "en": "Polar: read the latest data",
+        "fr": "Polar : lire les dernières données",
+        "de": "Polar: letzte Daten lesen",
+        "es": "Polar: leer los últimos datos"
+      },
+      "description": {
+        "en": "Today’s activity, last night, Nightly Recharge, training status, last session and weight from the last reading, for a message or a condition.",
+        "fr": "Activité du jour, dernière nuit, Nightly Recharge, statut d’entraînement, dernière séance et poids de la dernière lecture, pour un message ou une condition.",
+        "de": "Heutige Aktivität, letzte Nacht, Nightly Recharge, Trainingsstatus, letztes Training und Gewicht aus der letzten Abfrage, für eine Nachricht oder Bedingung.",
+        "es": "Actividad de hoy, última noche, Nightly Recharge, estado de entrenamiento, última sesión y peso de la última lectura, para un mensaje o una condición."
+      },
+      "fields": [
+        {
+          "key": "account",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Polar account",
+            "fr": "Compte Polar",
+            "de": "Polar-Konto",
+            "es": "Cuenta Polar"
+          },
+          "description": {
+            "en": "Leave empty for the linked account.",
+            "fr": "Laissez vide pour le compte lié.",
+            "de": "Leer lassen für das verknüpfte Konto.",
+            "es": "Déjalo vacío para la cuenta vinculada."
+          },
+          "required": false
+        }
+      ],
+      "outputs": [
+        {
+          "key": "steps",
+          "type": "number",
+          "label": {
+            "en": "Steps today",
+            "fr": "Pas du jour",
+            "de": "Schritte heute",
+            "es": "Pasos de hoy"
+          }
+        },
+        {
+          "key": "active_minutes",
+          "type": "number",
+          "label": {
+            "en": "Active time today (min)",
+            "fr": "Temps actif du jour (min)",
+            "de": "Aktive Zeit heute (Min.)",
+            "es": "Tiempo activo de hoy (min)"
+          }
+        },
+        {
+          "key": "calories",
+          "type": "number",
+          "label": {
+            "en": "Calories today (kcal)",
+            "fr": "Calories du jour (kcal)",
+            "de": "Kalorien heute (kcal)",
+            "es": "Calorías de hoy (kcal)"
+          }
+        },
+        {
+          "key": "distance_km",
+          "type": "number",
+          "label": {
+            "en": "Distance today (km)",
+            "fr": "Distance du jour (km)",
+            "de": "Strecke heute (km)",
+            "es": "Distancia de hoy (km)"
+          }
+        },
+        {
+          "key": "daily_goal_percent",
+          "type": "number",
+          "label": {
+            "en": "Daily goal (%)",
+            "fr": "Objectif du jour (%)",
+            "de": "Tagesziel (%)",
+            "es": "Objetivo diario (%)"
+          }
+        },
+        {
+          "key": "activity_date",
+          "type": "string",
+          "label": {
+            "en": "Date of the activity",
+            "fr": "Date de l’activité",
+            "de": "Datum der Aktivität",
+            "es": "Fecha de la actividad"
+          },
+          "description": {
+            "en": "Empty before the first sync of the day.",
+            "fr": "Vide avant la première synchro du jour.",
+            "de": "Leer vor der ersten Synchronisierung des Tages.",
+            "es": "Vacío antes de la primera sincronización del día."
+          }
+        },
+        {
+          "key": "sleep_score",
+          "type": "number",
+          "label": {
+            "en": "Sleep score",
+            "fr": "Score de sommeil",
+            "de": "Schlafwert",
+            "es": "Puntuación del sueño"
+          }
+        },
+        {
+          "key": "sleep_hours",
+          "type": "number",
+          "label": {
+            "en": "Time asleep (h)",
+            "fr": "Durée de sommeil (h)",
+            "de": "Schlafdauer (Std.)",
+            "es": "Tiempo dormido (h)"
+          }
+        },
+        {
+          "key": "sleep_date",
+          "type": "string",
+          "label": {
+            "en": "Date of the night",
+            "fr": "Date de la nuit",
+            "de": "Datum der Nacht",
+            "es": "Fecha de la noche"
+          }
+        },
+        {
+          "key": "nightly_recharge_status",
+          "type": "number",
+          "label": {
+            "en": "Nightly Recharge status (1-6)",
+            "fr": "Statut Nightly Recharge (1-6)",
+            "de": "Nightly-Recharge-Status (1-6)",
+            "es": "Estado Nightly Recharge (1-6)"
+          }
+        },
+        {
+          "key": "nightly_recharge_label",
+          "type": "string",
+          "label": {
+            "en": "Nightly Recharge (text)",
+            "fr": "Nightly Recharge (texte)",
+            "de": "Nightly Recharge (Text)",
+            "es": "Nightly Recharge (texto)"
+          }
+        },
+        {
+          "key": "ans_charge",
+          "type": "number",
+          "label": {
+            "en": "ANS charge",
+            "fr": "Charge SNA",
+            "de": "ANS-Ladung",
+            "es": "Carga SNA"
+          }
+        },
+        {
+          "key": "hrv_avg",
+          "type": "number",
+          "label": {
+            "en": "Heart rate variability (ms)",
+            "fr": "Variabilité cardiaque (ms)",
+            "de": "Herzfrequenzvariabilität (ms)",
+            "es": "Variabilidad cardíaca (ms)"
+          }
+        },
+        {
+          "key": "cardio_load_status",
+          "type": "string",
+          "label": {
+            "en": "Training status",
+            "fr": "Statut d’entraînement",
+            "de": "Trainingsstatus",
+            "es": "Estado de entrenamiento"
+          }
+        },
+        {
+          "key": "cardio_load_ratio",
+          "type": "number",
+          "label": {
+            "en": "Cardio load ratio",
+            "fr": "Ratio de charge cardio",
+            "de": "Cardio-Load-Verhältnis",
+            "es": "Ratio de carga cardio"
+          }
+        },
+        {
+          "key": "last_exercise_sport",
+          "type": "string",
+          "label": {
+            "en": "Last session: sport",
+            "fr": "Dernière séance : sport",
+            "de": "Letztes Training: Sportart",
+            "es": "Última sesión: deporte"
+          }
+        },
+        {
+          "key": "last_exercise_date",
+          "type": "string",
+          "label": {
+            "en": "Last session: date",
+            "fr": "Dernière séance : date",
+            "de": "Letztes Training: Datum",
+            "es": "Última sesión: fecha"
+          }
+        },
+        {
+          "key": "last_exercise_minutes",
+          "type": "number",
+          "label": {
+            "en": "Last session: duration (min)",
+            "fr": "Dernière séance : durée (min)",
+            "de": "Letztes Training: Dauer (Min.)",
+            "es": "Última sesión: duración (min)"
+          }
+        },
+        {
+          "key": "weight_kg",
+          "type": "number",
+          "label": {
+            "en": "Weight (kg)",
+            "fr": "Poids (kg)",
+            "de": "Gewicht (kg)",
+            "es": "Peso (kg)"
+          },
+          "description": {
+            "en": "As entered in Polar Flow (read twice a day).",
+            "fr": "Tel que saisi dans Polar Flow (lu deux fois par jour).",
+            "de": "Wie in Polar Flow eingetragen (zweimal täglich gelesen).",
+            "es": "Tal como figura en Polar Flow (se lee dos veces al día)."
+          }
+        },
+        {
+          "key": "summary",
+          "type": "string",
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
+          },
+          "description": {
+            "en": "A ready-made sentence, in the language of the configuration.",
+            "fr": "Une phrase toute faite, dans la langue de la configuration.",
+            "de": "Ein fertiger Satz in der Sprache der Konfiguration.",
+            "es": "Una frase lista, en el idioma de la configuración."
+          }
+        }
+      ]
+    }
+  ]
+}
